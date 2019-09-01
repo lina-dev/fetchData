@@ -11,13 +11,11 @@ URLS = [
     {
         'type': 'silver',
         'url': 'https://www.investing.com/commodities/silver-historical-data'
-    }
-]
+    }]
 FILE_NAME = 'prices.csv'
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/'
-                  '537.36'
-}
+                  '537.36'}
 
 def get_html(url):
     response = requests.get(url, headers=HEADERS)
@@ -29,15 +27,13 @@ def parse_html(source_type, html):
     soup = BeautifulSoup(html, 'html.parser')
     rows = soup.select('#curr_table')[0].find_all('tr')
     prices = []
-
     for row in rows[1:]:  # skip table header
         timestamp_tag, price_tag, *_ = row.select('td')
         timestamp, price = timestamp_tag['data-real-value'], price_tag['data-real-value']
         prices.append({
             'timestamp': timestamp,
             'price': price,
-            'type': source_type
-        })
+            'type': source_type})
     return prices
 
 def save_to_file(prices):
